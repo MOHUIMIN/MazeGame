@@ -1,2 +1,2 @@
 # MazeGame
-This is the repo of the maza game.
+This is the repo of the maze game.
