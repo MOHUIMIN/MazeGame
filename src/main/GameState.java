@@ -10,8 +10,10 @@ public class GameState {
 
     public GameState(int N, int K){
         this.mazeMap = new char[N][N];
+        //Firstly, fill with 'o' (not treasure)
         for(char[] row : mazeMap)
             Arrays.fill(row,'o');
+        //Secondly, randomly generate K treasures
         for(int i = 0; i < K; i++){
             Random r = new Random();
             int newX = 0, newY = 0;
@@ -27,6 +29,7 @@ public class GameState {
     }
 
     public boolean removeAndGenerate(int x, int y){
+        //remove treasure that is picked up by a player and generate a new treasure
         Random r = new Random();
         int newX = x, newY = y;
         while(mazeMap[newX][newY] != 'o'){

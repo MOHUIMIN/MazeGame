@@ -10,7 +10,7 @@ public class Game {
     public GameState gameState;
 
     public Game(String playerName, String playerId){
-        this.localPlayer = new Player(playerName,playerId,"IP","PORT") ;
+        this.localPlayer = new Player(playerName,playerId,"IP","PORT") ;// TODO: use real IP
         this.localPlayer.position = new int[]{0,0}; // TODO: randomly generate a valid position
         this.primaryServer = new String[2];
         this.backupServer = new String[2];
@@ -18,7 +18,7 @@ public class Game {
 
     }
 
-    //public boolean renderView(){return true;}
+    //TODO : public boolean renderView(){return true;}
     public boolean printMap(){
         for(int i = 0; i < gameState.mazeMap.length; i++){
             for(int j = 0; j < gameState.mazeMap.length; j++){
@@ -35,7 +35,7 @@ public class Game {
     }
 
     public boolean retrieveFromTracker(String[] tracker){
-        //temporary:
+        //TODO: Really connect to the tracker
         this.primaryServer[0] = this.localPlayer.IP;
         this.primaryServer[1] = this.localPlayer.Port;
         this.backupServer[0] = this.localPlayer.IP;
@@ -53,11 +53,11 @@ public class Game {
 
     public boolean updateServer(String[] primaryServer) {
         if (this.primaryServer[0].equals(this.localPlayer.IP) && this.primaryServer[1].equals(this.localPlayer.Port)){
-            //if localplayer is primary server, just update
+            //if localplayer is primary server, just update local game state
             this.gameState.allPlayerPositions.put(this.localPlayer, this.localPlayer.position);
             this.gameState.scoreBoard.put(this.localPlayer, this.localPlayer.score);
         }
-        //TODO: really update from server
+        //TODO: really update the server
         return true;
     }
 
@@ -125,7 +125,7 @@ public class Game {
         game.retrieveFromTracker(tracker);
         game.retrieveFromServer(game.primaryServer);
 
-        //operation
+        //operation in loop
         Scanner scanner = new Scanner(System.in);
         game.printMap();
         System.out.println("input operation(0- >stay | 1 ->left | 2 ->down | 3 ->right | 4 ->up | 9 ->exit) : ");
