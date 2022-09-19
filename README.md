@@ -1,7 +1,7 @@
-#I. MazeGame
+# I. MazeGame
 This is the repo of a p2p maze game.
 
-#II. Project Structure
+# II. Project Structure
 **Game** : The entry of the maze game. Every client/player is a "Game"
 
 **GameHandler** : Interface, to modify/retrieve info from a game(client/player)
@@ -20,7 +20,7 @@ This is the repo of a p2p maze game.
 
 **TrackerHandlerImpl** : The implementation of TrackHandler.
 
-#III. Game Main Thread Logic
+# III. Game Main Thread Logic
 **1.** Use the parameter to create a game object
 
 **2.** Connect to the tracker, get the basic game info(N,K and a random player) and register yourself
@@ -31,14 +31,14 @@ This is the repo of a p2p maze game.
 
 **5.** Receive the input from command line and operate corresponding to the input
 
-#IV. Ping thread Logic
+# IV. Ping thread Logic
 **1.** Ping primary server and handle fail if needed
 
 **2.** Ping backup server and handle fail if needed
 
 **3.** ping some random player and handle fail if needed
 
-#V. Crash/Fail handling Logic
+# V. Crash/Fail handling Logic
 To handle server/client fail, you firstly have to obtain local game's gamehandler's lock(using synchronized).
 The reason is that if you do not do so, someone may modify your primary/backup server during your progress
 of handling the fail. That will incur some chaos in your server info.
@@ -57,7 +57,7 @@ To avoid the above chaos, you should obtain your game handler's lock before you 
 is obtained by you, no one can update your info(to update a client's info, you must obtain its game handler lock) 
 after you enter the fail handling function
 
-##1. Primary Server Crash
+## 1. Primary Server Crash
 If the primary server crashed, we need to contact backup server.
 (It's guaranteed that the backup server is not crashed at this time,
 because we ping them every 1.5 seconds and the interval of two crashes is at least 2 seconds)
@@ -68,7 +68,7 @@ If you're not the first one that contact the backup server, you should find that
 server of itself(and all other players), just set your primary and backup server according to the info you get from the original 
 backup server(the current primary server).
 
-##2. Backup Server Crash
+## 2. Backup Server Crash
 If the backup server crashed, we need to contact primary server.
 (It's guaranteed that the primary server is not crashed at this time, same reason as mentioned in primary server crash)
 
@@ -79,7 +79,7 @@ If you're not the first one that contact the primary server, you should find tha
 different from yours(specifically, its backup server is not the one that you found crashed). We reckon that
 the new backup server is already regenerated. Just set your new backup according to primary server's backup.
 
-##3. Random Client Crash
+## 3. Random Client Crash
 Just delete it from your local game state, notify your primary and backup and the tracker(let them also delete it).
 
 
