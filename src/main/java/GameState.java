@@ -1,10 +1,15 @@
+package main.java;
+import java.io.Serializable;
 import java.util.*;
 
-public class GameState {
+public class GameState implements Serializable {
+
+    private static final long serialVersionUID = 42L;
+
     public char[][] mazeMap;
-    public List<Player> playerList;
-    public Map<Player,Integer> scoreBoard;
-    public Map<Player,int[]> allPlayerPositions;
+    public List<String> playerList;
+    public Map<String,Integer> scoreBoard;
+    public Map<String,int[]> allPlayerPositions;
 
     public GameState(int N, int K){
         this.mazeMap = new char[N][N];
@@ -21,9 +26,9 @@ public class GameState {
             }
             this.mazeMap[newX][newY] = '*';
         }
-        this.playerList = new ArrayList<Player>();
-        this.scoreBoard = new HashMap<Player,Integer>();
-        this.allPlayerPositions = new HashMap<Player,int[]>();
+        this.playerList = new ArrayList<>();
+        this.scoreBoard = new HashMap<>();
+        this.allPlayerPositions = new HashMap<>();
     }
 
     public boolean removeAndGenerate(int x, int y){
@@ -41,9 +46,26 @@ public class GameState {
 
     public boolean valid(int x, int y){
         //TODO : Avoid two player in the same position
-        if(x >= 0 && x < mazeMap.length && y >= 0 && y < mazeMap.length)
-            return true;
-        else
+        //out of map!
+        if(!(x >= 0 && x < mazeMap.length && y >= 0 && y < mazeMap.length))
             return false;
+        else{
+            for(int[] position : this.allPlayerPositions.values()){
+                if(x == position[0] && y == position[1])
+                    return false;
+            }
+            return true;
+        }
+    }
+
+    public int[] randomValidPosition(){
+        Random r = new Random();
+        int newX = r.nextInt(mazeMap.length);
+        int newY = r.nextInt(mazeMap.length);
+        while(!valid(newX,newY)){
+            newX = r.nextInt(mazeMap.length);
+            newY = r.nextInt(mazeMap.length);
+        }
+        return new int[]{newX,newY};
     }
 }
