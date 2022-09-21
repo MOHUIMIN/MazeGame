@@ -1,4 +1,4 @@
-package main.java;
+package game;
 public class Player {
 
     public String playerId;

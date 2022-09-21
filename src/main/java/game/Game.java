@@ -1,4 +1,4 @@
-package main.java;
+package game;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -250,8 +250,8 @@ public class Game {
 
 
         //initialization
-        String[] tracker = {args[0],args[1]};
-        String playerId = args[2];
+        String[] tracker = {args[0],args[1]}; // tracker IP, tracker port
+        String playerId = args[2]; // player ID
 
         Game game = new Game(playerId, Integer.parseInt(tracker[1]));
 
@@ -264,7 +264,7 @@ public class Game {
         }
 
         //retrieve basic game info from tracker and register yourself
-        List<Object> trackerInfo = game.retrieveFromTracker(trackerHandler, playerId);
+        List<Object> trackerInfo = game.retrieveFromTracker(trackerHandler, playerId); // also register this player
         int N = (int) trackerInfo.get(0);
         int K = (int) trackerInfo.get(1);
         String firstPlayer = (String) trackerInfo.get(2);// TODO : SHOULD BE LAST PLAYER !
