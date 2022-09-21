@@ -82,6 +82,15 @@ the new backup server is already regenerated. Just set your new backup according
 ## 3. Random Client Crash
 Just delete it from your local game state, notify your primary and backup and the tracker(let them also delete it).
 
+# VI: Game state update policy
 
+
+## Policy:
+For any client in the game that wants to make a move, it needs to connect to the primary server first. The primary server will take its move request, and add a read write lock to primary server's game state to make sure that the update is synchronized. If the move is valid, the status in primary server will be updated. Then the client should update the local game status via retrieve from the primary server's latest game state. The next step for the client is to connect the backup server with the move request and update backup server's local status (similar as the primary server). 
+
+## Crash handling policy:
+If primary server crashes, then the update will fail, the client will receive an invalid move. 
+
+If the backup server crashes, then the local game state update will still receive the latest game status from the primary server. The ping thread will be responsible for regenerate new backup server and it will retrieve the latest game status from the primary server. 
 
 
