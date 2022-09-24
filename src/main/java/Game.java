@@ -230,8 +230,11 @@ public class Game {
             case 2:
             case 3:
             case 4:
+                // var currentBackup = xxx;
                 retrieveFromServer(this.primaryServer);
                 updateLocal(this.gameState, opNum);
+                //primaryHandler.updateServerGamestate(String serverID, String localID, int opNum)
+                //if cannot connect -> invalid move
                 updateServer(this.primaryServer);
                 updateServer(this.backupServer);
                 //TODO : THIS PART SHOULD SYNCHRONIZE
