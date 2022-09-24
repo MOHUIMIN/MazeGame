@@ -1,4 +1,4 @@
-package main.java;
+package game;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -155,13 +155,15 @@ public class PingThread extends Thread{
             GameHandler backupHandler = null;
 
             try {
+                trackerHandler.deletePlayer(failServer);
+
                 primaryHandler = (GameHandler) Naming.lookup(this.game.primaryServer);
                 backupHandler = (GameHandler) Naming.lookup(this.game.backupServer);
 
                 primaryHandler.deletePlayer(failServer);
                 backupHandler.deletePlayer(failServer);
                 this.game.gameHandler.deletePlayer(failServer);
-                trackerHandler.deletePlayer(failServer);
+
 
             }catch (MalformedURLException | NotBoundException | RemoteException e){
                 System.out.println("delete dead player fail");
