@@ -1,21 +1,24 @@
 package game;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Map;
 
+import javax.swing.*;
+import java.beans.PropertyChangeEvent;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeListener;
+import java.awt.*;
+import java.util.Map;
+import java.awt.event.WindowAdapter;
 
 public class GUI extends JFrame implements PropertyChangeListener {
-    private String localPlayer;
-    private JLabel[][] mapGrids;
-    private JLabel infoLabel;
-    private GameState gameState;
 
-    private void updateInfoLabel(){
+    public GameState gameState;
+    public String localPlayer;
+    public JLabel scoreBoardLabel;
+    public JLabel[][] mazeMapGrids;
+
+
+
+    public void updateScoreBoardLabel(){
         StringBuilder sb = new StringBuilder("<html> ScoreBoard <br>");
         for(Map.Entry<String,Integer> playerAndScore : this.gameState.scoreBoard.entrySet()){
             sb.append("Player : " + playerAndScore.getKey()).
@@ -24,15 +27,14 @@ public class GUI extends JFrame implements PropertyChangeListener {
                     append("<br>");
         }
         sb.append("</html>");
-        infoLabel.setText(sb.toString());
+        scoreBoardLabel.setText(sb.toString());
     }
 
-    private void updateMapGrids() {
+    public void updateMazeMapGrids() {
         int rows = this.gameState.mazeMap.length;
         int cols = this.gameState.mazeMap.length;
-        for(int i=0; i<rows; i++) {
-            for(int j=0; j<cols; j++) {
-                int pos = i * rows + j;
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < cols; j++) {
                 Color backgroundColor = Color.white;
                 StringBuilder cell = new StringBuilder();
                 boolean hasTreasure = false;
@@ -50,8 +52,8 @@ public class GUI extends JFrame implements PropertyChangeListener {
                         break;
                     }
                 }
-                mapGrids[i][j].setText(cell.toString());
-                mapGrids[i][j].setBackground(backgroundColor);
+                mazeMapGrids[i][j].setText(cell.toString());
+                mazeMapGrids[i][j].setBackground(backgroundColor);
             }
         }
     }
@@ -63,29 +65,29 @@ public class GUI extends JFrame implements PropertyChangeListener {
         this.localPlayer = localPlayer;
         this.gameState = gameState;
 
-        // Info
-        Panel legend = new Panel(new FlowLayout());
-        infoLabel = new JLabel();
-        updateInfoLabel();
-        infoLabel.setBorder(BorderFactory.createLineBorder(Color.black));
-        infoLabel.setSize(300, 300);
-        legend.add(infoLabel);
+        //init scoreboard
+        Panel sideInfo = new Panel(new FlowLayout());
+        scoreBoardLabel = new JLabel();
+        updateScoreBoardLabel();
+        scoreBoardLabel.setBorder(BorderFactory.createLineBorder(Color.black));
+        scoreBoardLabel.setSize(300, 300);
+        sideInfo.add(scoreBoardLabel);
 
-        // Map
+        //init map grids
         Panel map = new Panel(new GridLayout(rows, cols));
-        mapGrids = new JLabel[rows][cols];
-        for(int i=0; i<rows; i++) {
+        mazeMapGrids = new JLabel[rows][cols];
+        for(int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                mapGrids[i][j] = new JLabel();
-                mapGrids[i][j].setOpaque(true);
-                mapGrids[i][j].setBorder(BorderFactory.createLineBorder(Color.black));
-                map.add(mapGrids[i][j]);
+                mazeMapGrids[i][j] = new JLabel();
+                mazeMapGrids[i][j].setOpaque(true);
+                mazeMapGrids[i][j].setBorder(BorderFactory.createLineBorder(Color.black));
+                map.add(mazeMapGrids[i][j]);
             }
         }
-        updateMapGrids();
+        updateMazeMapGrids();
         setLayout(new BorderLayout());
         add(map, BorderLayout.CENTER);
-        add(legend, BorderLayout.WEST);
+        add(sideInfo, BorderLayout.WEST);
         setTitle(localPlayer);
         setSize(400, 400);
         setAlwaysOnTop(true);
@@ -101,7 +103,7 @@ public class GUI extends JFrame implements PropertyChangeListener {
 
     public void propertyChange(PropertyChangeEvent event) {
         gameState = (GameState) event.getNewValue();
-        updateInfoLabel();
-        updateMapGrids();
+        updateScoreBoardLabel();
+        updateMazeMapGrids();
     }
 }

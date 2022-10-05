@@ -190,7 +190,7 @@ public class PingThread extends Thread{
         System.out.println("[" + java.time.LocalTime.now() + "] " +"PingThread start...");
         while (true)
         {
-            System.out.println("[" + java.time.LocalTime.now() + "] " + " New ping round start : ");
+            //System.out.println("[" + java.time.LocalTime.now() + "] " + " New ping round start : ");
             String primaryServer = this.game.primaryServer;
             if(!this.ping(primaryServer)){
                 //PRIMARY REGENERATE
@@ -224,7 +224,7 @@ public class PingThread extends Thread{
                 }
             }
             try{
-                System.out.println("[" + java.time.LocalTime.now() + "] " + " This ping round end, sleep");
+                //System.out.println("[" + java.time.LocalTime.now() + "] " + " This ping round end, sleep");
                 Thread.sleep(500);//sleep for 1100 ms
             } catch (InterruptedException ex){
                 //TODO : DO WHAT ?

@@ -37,72 +37,6 @@ public class Game {
         this.observable.addPropertyChangeListener(gui);
     }
 
-//    public boolean initialize(String firstPlayer, int playerListLength, int N, int K) {
-//        //TODO : PLAYER LIST LENGTH MIGHT BE STALE !!!!!!
-//        //Use this function when a game just start
-//        //To initialize the gamestate and server info and update your local info to the server
-//        if(playerListLength == 1){
-//            //if you are the first player
-//            //you create a new gamestate, add your info to gamestate
-//            this.gameState = new GameState(N,K);
-//
-//            this.gameState.playerList.add(this.localPlayer.playerId);
-//            this.localPlayer.position = this.gameState.randomValidPosition();
-//            this.gameState.allPlayerPositions.put(this.localPlayer.playerId,this.localPlayer.position);
-//            this.gameState.scoreBoard.put(this.localPlayer.playerId,this.localPlayer.score);
-//
-//            //set server info, because you're the first, you become both primary and backup server
-//            this.primaryServer = this.localPlayer.playerId;
-//            this.backupServer = this.localPlayer.playerId;
-//
-//            System.out.println("Initialize 1 succeed");
-//        }
-//        else if(playerListLength == 2){
-//            //if you are the second
-//            //firstly, set server info and tell the primary server that you will become the backup
-//            this.primaryServer = firstPlayer;
-//            this.backupServer = this.localPlayer.playerId;
-//            this.updateServerSetting(this.primaryServer, this.primaryServer,this.backupServer);
-//
-//            //retrieve the latest game state and merge your gamestate to primary server's game state
-//            GameHandler primaryGameHandler = null;
-//            Registry registry = null;
-//            try {
-//                registry = LocateRegistry.getRegistry(this.tracker[0],Integer.parseInt(this.tracker[1]));
-//                primaryGameHandler = (GameHandler) registry.lookup(this.primaryServer);
-//                primaryGameHandler.addNewPlayer(this.localPlayer.playerId);
-//                this.retrieveFromServer(this.primaryServer);
-//                System.out.println("Initialize 2 succeed");
-//            } catch (NotBoundException | RemoteException | NullPointerException e) {
-//                System.out.println(e);
-//                System.out.println("cannot add you as a new player");
-//                return false;
-//            }
-//        }
-//        else{
-//            //if you are just some random player that do not have to become server
-//            //set the primary and backup with the info that you get from the first player in tracker's playerlist
-//            String[] servers = this.initializeServerSetting(firstPlayer);
-//            this.primaryServer = servers[0];
-//            this.backupServer = servers[1];
-//
-//            //retrieve and merge your gamestate to primary server's game state
-//            GameHandler primaryGameHandler = null;
-//            Registry registry = null;
-//            try {
-//                registry = LocateRegistry.getRegistry(this.tracker[0],Integer.parseInt(this.tracker[1]));
-//                primaryGameHandler = (GameHandler) registry.lookup(this.primaryServer);
-//                primaryGameHandler.addNewPlayer(this.localPlayer.playerId);
-//                this.retrieveFromServer(this.primaryServer);
-//                System.out.println("Initialize more than 2 succeed");
-//                //TODO : SHOULD I ALSO ADD THIS INFO TO BACKUP SERVER ?
-//            } catch (NotBoundException | RemoteException | NullPointerException e) {
-//                System.out.println("cannot add you as a new player");
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
 
     public boolean initialize(String firstPlayer, int playerListLength, int N, int K) {
         //TODO : PLAYER LIST LENGTH MIGHT BE STALE !!!!!!
@@ -427,7 +361,7 @@ public class Game {
         if(res == false)
             System.out.println("---------------invalid move---------------");
         else
-            System.out.println("[" + java.time.LocalTime.now() + "] " +"Primary server: " + primaryServer + " successfully move for player " + this.localPlayer.playerId);
+            System.out.println("[" + java.time.LocalTime.now() + "] " +"Primary server: " + primaryServer + " successfully move operation: " +  opNum  + " for player " + this.localPlayer.playerId);
         return res;
     }
 
@@ -480,7 +414,7 @@ public class Game {
                     trackerHandler.deleteInitSet(game.localPlayer.playerId);
             }
             else {
-                //initialize V2
+                //initialize V2 : firstPlayer is initializing
                 initialized = game.initializeV2(firstPlayer,N,K);
                 if(!initialized){
                     try {
@@ -501,18 +435,13 @@ public class Game {
 
             //initialize game state and set primary/backup servers
             //TODO : WHAT IF NO ACTIVE PLAYER IN TRACKER'S PLAYERLIST
-        if(initialized){
+            if(initialized){
 
-            game.initializeGui(game.gameState, playerId);
-            System.out.println("[" + java.time.LocalTime.now() + "] " +"Initialize successful with player : " + firstPlayer);
-            System.out.println("[" + java.time.LocalTime.now() + "] " +"Initialize result : " + "Primary : " + game.primaryServer + " Backup : " + game.backupServer);
-        }
+                game.initializeGui(game.gameState, playerId);
+                System.out.println("[" + java.time.LocalTime.now() + "] " +"Initialize successful with player : " + firstPlayer);
+                System.out.println("[" + java.time.LocalTime.now() + "] " +"Initialize result : " + "Primary : " + game.primaryServer + " Backup : " + game.backupServer);
+            }
         }while(!initialized);
-
-
-
-
-
 
 
         new BeforeEnd(trackerHandler,game.localPlayer.playerId);
